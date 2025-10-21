@@ -20,12 +20,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Card HTML now includes a participants section with an empty UL to poblar
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div class="participants-section">
+            <h5>Participants (<span class="participants-count">${details.participants.length}</span>)</h5>
+            <ul class="participants-list"></ul>
+          </div>
         `;
+
+        // Rellenar la lista de participantes dinámicamente para mejor accesibilidad/estilo
+        const participantsUl = activityCard.querySelector(".participants-list");
+        if (Array.isArray(details.participants) && details.participants.length > 0) {
+          details.participants.forEach((p) => {
+            const li = document.createElement("li");
+            li.className = "participant";
+            li.textContent = p;
+            participantsUl.appendChild(li);
+          });
+        } else {
+          const empty = document.createElement("li");
+          empty.className = "participants-empty";
+          empty.textContent = "No participants yet";
+          participantsUl.appendChild(empty);
+        }
 
         activitiesList.appendChild(activityCard);
 
